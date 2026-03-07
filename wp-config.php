@@ -115,6 +115,10 @@ if ( isset( $_SERVER['HTTP_HOST'] ) ) {
     define( 'WP_SITEURL', $protocol . '://' . $_SERVER['HTTP_HOST'] );
 }
 
+// Tambahkan cookie domain untuk mencegah masalah redirect auth
+define('COOKIE_DOMAIN', $_SERVER['HTTP_HOST']);
+define('WP_HOME_OVERRIDE', true);
+
 /* That's all, stop editing! Happy publishing. */
 
 /** Absolute path to the WordPress directory. */
