@@ -195,3 +195,18 @@ function ipm_include_custom_post_types_in_search($query) {
     return $query;
 }
 add_action('pre_get_posts', 'ipm_include_custom_post_types_in_search');
+
+// Limit Image Upload Size to 3MB
+function ipm_limit_image_upload_size($file) {
+    // Check if the uploaded file is an image
+    if (strpos($file['type'], 'image') !== false) {
+        // Set limit to 3 Megabytes (3 * 1024 * 1024 bytes)
+        $size_limit = 3145728; 
+
+        if ($file['size'] > $size_limit) {
+            $file['error'] = 'Gagal mengunggah foto: Ukuran foto melampaui batas maksimal sebesar 3MB. Harap kompres ukuran foto Anda.';
+        }
+    }
+    return $file;
+}
+add_filter('wp_handle_upload_prefilter', 'ipm_limit_image_upload_size');

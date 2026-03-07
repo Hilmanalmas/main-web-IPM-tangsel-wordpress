@@ -48,9 +48,11 @@ ipm_set_post_views(get_the_ID());
                                 </div>
                                 
                                 <!-- Author -->
-                                <span style="display: flex; align-items: center; gap: 6px; color: #00b52a; font-weight: 600;">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                                    <?php the_author(); ?>
+                                <span style="display: flex; align-items: center; gap: 6px; font-weight: 600;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--secondary)"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    <a href="<?php echo esc_url(get_author_posts_url(get_the_author_meta('ID'))); ?>" style="color: var(--secondary); text-decoration: none;">
+                                        <?php the_author(); ?>
+                                    </a>
                                 </span>
                                 
                                 <!-- Date -->
@@ -85,8 +87,10 @@ ipm_set_post_views(get_the_ID());
                                 <?php echo get_avatar( get_the_author_meta('user_email'), 160, '', '', array('class' => 'avatar', 'style' => 'width: 100%; height: auto; object-fit: cover;') ); ?>
                             </div>
                             <div class="author-info">
-                                <h3 style="margin: 0 0 8px 0; font-size: 1.25rem; color: #00b52a; font-family: var(--font-display); font-weight: 700;">
-                                    <?php the_author(); ?>
+                                <h3 style="margin: 0 0 8px 0; font-size: 1.25rem; font-family: var(--font-display); font-weight: 700;">
+                                    <a href="<?php echo esc_url(get_author_posts_url(get_the_author_meta('ID'))); ?>" style="color: var(--secondary); text-decoration: none;">
+                                        <?php the_author(); ?>
+                                    </a>
                                 </h3>
                                 <div style="color: var(--text-main); font-weight: 700; font-size: 0.95rem;">
                                     <?php echo count_user_posts( get_the_author_meta('ID') ); ?> posts
