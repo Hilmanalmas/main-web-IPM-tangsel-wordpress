@@ -100,7 +100,17 @@ define( 'WP_DEBUG', false );
 
 /* Add any custom values between this line and the "stop editing" line. */
 
-
+// Konfigurasi ini mengatur URL aplikasi secara otomatis, sangat berguna jika
+// memindahkan dari localhost ke VPS production (mencegah error gambar hilang/CSS rusak)
+if ( isset( $_SERVER['HTTP_HOST'] ) ) {
+    $protocol = ( ! empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443 ) ? 'https' : 'http';
+    if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) {
+        $protocol = 'https';
+        $_SERVER['HTTPS'] = 'on';
+    }
+    define( 'WP_HOME', $protocol . '://' . $_SERVER['HTTP_HOST'] );
+    define( 'WP_SITEURL', $protocol . '://' . $_SERVER['HTTP_HOST'] );
+}
 
 /* That's all, stop editing! Happy publishing. */
 
