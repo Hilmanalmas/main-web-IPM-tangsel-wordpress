@@ -131,8 +131,15 @@ if ( isset( $_SERVER['HTTP_HOST'] ) ) {
         define('FORCE_SSL_ADMIN', false);
     }
 
-    define( 'WP_HOME', $protocol . '://' . $_SERVER['HTTP_HOST'] );
-    define( 'WP_SITEURL', $protocol . '://' . $_SERVER['HTTP_HOST'] );
+    // Jika WP_SITE_URL spesifik diatur di .env (misalnya, https://ipmtangsel.or.id), 
+    // maka gunakan itu. Jika tidak, ambil dari URL yg diketikkan di browser.
+    $final_url = getenv('WP_SITE_URL');
+    if (!$final_url) {
+        $final_url = $protocol . '://' . $_SERVER['HTTP_HOST'];
+    }
+
+    define( 'WP_HOME', $final_url );
+    define( 'WP_SITEURL', $final_url );
     
     // Cegah WP-Cron hang (unresponsive) ketika dijalankan lokal di port 8000
     if (strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false || strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) {
@@ -142,10 +149,13 @@ if ( isset( $_SERVER['HTTP_HOST'] ) ) {
     }
 }
 
+// Ekstrak domain dari $final_url untuk keperluan COOKIE_DOMAIN
+$cookie_host = parse_url(defined('WP_HOME') ? WP_HOME : 'http://' . $_SERVER['HTTP_HOST'], PHP_URL_HOST);
+
 // Tambahkan cookie domain untuk mencegah masalah redirect auth
 // Jangan definisikan COOKIE_DOMAIN jika localhost/127.0.0.1 karena WordPress sering mem-blokirnya
-if (!in_array($_SERVER['HTTP_HOST'], ['localhost', '127.0.0.1', 'localhost:8000', '127.0.0.1:8000'])) {
-    define('COOKIE_DOMAIN', $_SERVER['HTTP_HOST']);
+if (!in_array($cookie_host, ['localhost', '127.0.0.1'])) {
+    define('COOKIE_DOMAIN', $cookie_host);
 }
 define('WP_HOME_OVERRIDE', true);
 
