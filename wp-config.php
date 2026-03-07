@@ -115,12 +115,8 @@ if ( isset( $_SERVER['HTTP_HOST'] ) ) {
         $_SERVER['HTTPS'] = 'on';
     }
     
-    // Hapus port jika ada di HTTP_HOST (misalnya ipmtangsel.or.id:8000 -> ipmtangsel.or.id)
+    // Gunakan port asli (termasuk :8000/ :8080) jika ada
     $host = $_SERVER['HTTP_HOST'];
-    if ( strpos( $host, ':' ) !== false ) {
-        $host_parts = explode( ':', $host );
-        $host = $host_parts[0];
-    }
 
     define( 'WP_HOME', $protocol . '://' . $host );
     define( 'WP_SITEURL', $protocol . '://' . $host );
