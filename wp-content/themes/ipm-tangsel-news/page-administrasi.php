@@ -9,8 +9,15 @@ get_header(); ?>
 
 <main id="primary" class="site-main page-template-wrapper">
 
+    <?php
+    $header_style = "background-image: linear-gradient(rgba(0, 31, 63, 0.6), rgba(15, 23, 42, 0.6)), url('" . get_template_directory_uri() . "/asset/gedung-dakwah.jpg');";
+    if ( has_post_thumbnail() ) {
+        $header_image_url = get_the_post_thumbnail_url( get_the_ID(), 'full' );
+        $header_style = 'background-image: linear-gradient(rgba(0, 31, 63, 0.6), rgba(15, 23, 42, 0.6)), url(\'' . esc_url( $header_image_url ) . '\');';
+    }
+    ?>
     <!-- Page Header Solid -->
-    <section class="page-header" style="background-color: var(--text-main);">
+    <section class="page-header" style="<?php echo $header_style; ?>">
         <div class="container">
             <h1 class="page-title"><?php the_title(); ?></h1>
             <p class="page-subtitle">Informasi Kegiatan dan Program Unggulan</p>

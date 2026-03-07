@@ -17,6 +17,30 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
+<!-- IPM Website Preloader -->
+<div id="ipm-preloader">
+    <div class="preloader-content">
+        <div class="spinner"></div>
+        <img class="preloader-logo" src="<?php echo get_template_directory_uri(); ?>/asset/Logo_PD_IPM.png" alt="Loading IPM...">
+    </div>
+</div>
+
+<script>
+// Hide preloader when the page is fully loaded
+window.addEventListener('load', function() {
+    const preloader = document.getElementById('ipm-preloader');
+    if (preloader) {
+        // Add class to trigger CSS fadeout
+        preloader.classList.add('preloader-fade-out');
+        
+        // Remove completely from DOM after animation finishes (500ms)
+        setTimeout(() => {
+            preloader.style.display = 'none';
+        }, 500);
+    }
+});
+</script>
+
 <div id="page" class="site">
     <!-- Modern Sticky Header -->
     <header id="masthead" class="site-header">
@@ -55,12 +79,18 @@
             </nav>
             
             <div class="header-actions">
-                <button class="search-toggle" aria-label="Search">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                </button>
+                <!-- Expanding Inline Search -->
+                <div class="header-search-container">
+                    <form role="search" method="get" class="header-search-form" action="<?php echo esc_url(home_url('/')); ?>">
+                        <input type="search" class="header-search-input" placeholder="Cari berita, agenda, atau profil..." value="<?php echo get_search_query(); ?>" name="s" title="Search for:" />
+                        <button type="submit" class="search-submit" aria-label="Search">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
                 <button class="mobile-menu-toggle" aria-label="Menu">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="3" y1="12" x2="21" y2="12"></line>

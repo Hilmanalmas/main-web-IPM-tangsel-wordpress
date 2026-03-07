@@ -91,7 +91,7 @@
 .icon-box {
   width: 56px;
   height: 56px;
-  background: rgba(232, 103, 41, 0.1);
+  background: rgba(0, 31, 63, 0.1);
   color: var(--primary);
   border-radius: 50%;
   display: flex;
@@ -141,9 +141,9 @@
   flex-shrink: 0;
 }
 
-.bg-teal { background: var(--secondary); }
-.bg-orange { background: var(--primary); }
-.bg-yellow { background: var(--accent); color: var(--text-main); }
+.bg-teal { background: var(--secondary); color: white; }
+.bg-orange { background: var(--primary); color: white; }
+.bg-yellow { background: var(--accent); color: var(--primary); }
 
 .feature-text h3 {
   margin-top: 0;
@@ -249,7 +249,7 @@
 .doc-icon {
   width: 64px;
   height: 64px;
-  background: rgba(232, 103, 41, 0.1);
+  background: rgba(0, 31, 63, 0.1);
   color: var(--primary);
   border-radius: var(--radius-sm);
   display: flex;
@@ -257,6 +257,14 @@
   justify-content: center;
   flex-shrink: 0;
   margin-right: 24px;
+  overflow: hidden;
+}
+
+.doc-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
 }
 
 .doc-info {
@@ -308,7 +316,7 @@
 .btn-download:hover {
   background: var(--primary-dark);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(232, 103, 41, 0.3);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 @media (max-width: 768px) {
@@ -363,4 +371,174 @@
   .feature-icon-lg {
     margin: 0 auto;
   }
+}
+
+/* ==========================================================================
+   Sidebar & Widget Styling
+   ========================================================================== */
+
+/* Layout Container */
+.page-with-sidebar {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 60px;
+  align-items: start;
+}
+
+@media (max-width: 991px) {
+  .page-with-sidebar {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+/* Sidebar Wrapper */
+.sidebar-area {
+  position: sticky;
+  top: 100px; /* stick below header */
+}
+
+/* Standard Widget Box */
+.widget {
+  background: var(--bg-surface);
+  padding: 24px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  margin-bottom: 30px;
+}
+
+.widget-title {
+  font-size: 1.1rem;
+  font-family: var(--font-display);
+  color: var(--primary);
+  border-bottom: 2px solid var(--secondary);
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Small Suggested News List */
+.widget-news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.news-item-small {
+  display: flex;
+  gap: 16px;
+  text-decoration: none;
+  align-items: center;
+  transition: transform 0.2s ease, background 0.2s ease;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+}
+
+.news-item-small:hover {
+  background: var(--bg-main);
+  transform: translateX(4px);
+}
+
+.news-item-small .news-item-img {
+  width: 70px;
+  height: 70px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--border-light);
+}
+
+.news-item-small .news-item-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.news-item-small .no-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--primary);
+  opacity: 0.1;
+}
+
+.news-item-small .news-item-content {
+  flex-grow: 1;
+}
+
+.news-item-title {
+  color: var(--text-main);
+  font-size: 0.95rem;
+  margin: 0 0 6px 0;
+  line-height: 1.4;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.news-item-small:hover .news-item-title {
+  color: var(--primary);
+}
+
+.news-item-date {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+/* Small Recent Comments List */
+.widget-comments-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comment-item-small {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.comment-item-small:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.comment-icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(0, 31, 63, 0.1);
+  color: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.comment-content {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.comment-author {
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.comment-post-title {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.comment-post-title:hover {
+  color: var(--secondary);
 }

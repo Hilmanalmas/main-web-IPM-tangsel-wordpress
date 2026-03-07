@@ -9,11 +9,22 @@ get_header(); ?>
 
 <main id="primary" class="site-main page-template-wrapper">
 
+    <?php
+    $header_style = "background-image: linear-gradient(rgba(0, 31, 63, 0.6), rgba(15, 23, 42, 0.6)), url('" . get_template_directory_uri() . "/asset/gedung-dakwah.jpg'); color: white;";
+    $title_style  = 'color: white;';
+    $subtitle_style = 'color: rgba(255,255,255,0.8);';
+    if ( has_post_thumbnail() ) {
+        $header_image_url = get_the_post_thumbnail_url( get_the_ID(), 'full' );
+        $header_style = 'background-image: linear-gradient(rgba(0, 31, 63, 0.6), rgba(15, 23, 42, 0.6)), url(\'' . esc_url( $header_image_url ) . '\'); border-bottom: none; color: white;';
+        $title_style  = ''; // remove overrides, let default white apply
+        $subtitle_style = ''; 
+    }
+    ?>
     <!-- Page Header Solid -->
-    <section class="page-header" style="background-color: var(--bg-surface); border-bottom: 1px solid var(--border-light); color: var(--text-main);">
+    <section class="page-header" style="<?php echo $header_style; ?>">
         <div class="container">
-            <h1 class="page-title" style="color: var(--text-main); text-shadow: none;"><?php the_title(); ?></h1>
-            <p class="page-subtitle" style="color: var(--text-muted);">Berita dan Update Terbaru Seputar Pelajar Anggrek</p>
+            <h1 class="page-title" style="<?php echo $title_style; ?>"><?php the_title(); ?></h1>
+            <p class="page-subtitle" style="<?php echo $subtitle_style; ?>">Berita dan Update Terbaru Seputar Pelajar Anggrek</p>
         </div>
     </section>
 
@@ -47,12 +58,22 @@ get_header(); ?>
                                         </div>
                                     <?php endif; ?>
                                 </a>
+                                <div class="news-categories" style="position: absolute; top: 16px; left: 16px; display: flex; flex-wrap: wrap; gap: 8px;">
                                 <?php 
                                     $categories = get_the_category();
                                     if ( ! empty( $categories ) ) {
-                                        echo '<span class="news-category-badge">' . esc_html( $categories[0]->name ) . '</span>';
+                                        foreach( $categories as $cat ) {
+                                            echo '<span class="news-category-badge" style="position: static; background: var(--secondary);">' . esc_html( $cat->name ) . '</span>';
+                                        }
+                                    }
+                                    $tags = get_the_tags();
+                                    if ( ! empty( $tags ) ) {
+                                        foreach( $tags as $t ) {
+                                            echo '<span class="news-category-badge" style="position: static; background: var(--secondary);">' . esc_html( $t->name ) . '</span>';
+                                        }
                                     }
                                 ?>
+                                </div>
                             </div>
                             
                             <!-- Content -->
