@@ -96,23 +96,50 @@ $table_prefix = 'wp_';
  *
  * @link https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/
  */
-define( 'WP_DEBUG', false );
+define( 'WP_DEBUG', true );
+define( 'WP_DEBUG_LOG', true );
+define( 'WP_DEBUG_DISPLAY', false );
 
 /* Add any custom values between this line and the "stop editing" line. */
 
 // Konfigurasi ini mengatur URL aplikasi secara otomatis, sangat berguna jika
 // memindahkan dari localhost ke VPS production (mencegah error gambar hilang/CSS rusak)
 
-// Gunakan HTTP_HOST yang dikirim oleh browser, yang pasti menyertakan port aslinya
+// Dukungan untuk Reverse Proxy (Nginx / Cloudflare VPS)
+// Ini adalah kunci agar saat di-deploy ke VPS, WordPress tahu domain aslinya (ipmtangsel.or.id)
+if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+    $proxy_host = $_SERVER['HTTP_X_FORWARDED_HOST'];
+    // Ambil host pertama jika ada banyak proxy
+    $proxy_host = explode(',', $proxy_host)[0];
+    $_SERVER['HTTP_HOST'] = trim($proxy_host);
+}
+
+// Gunakan HTTP_HOST yang dikirim oleh browser (atau proxy)
 if ( isset( $_SERVER['HTTP_HOST'] ) ) {
-    $protocol = ( !empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' ) ? 'https' : 'http';
-    if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) {
+    $protocol = 'http';
+    if ( (isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off') || 
+         (isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') ||
+         (isset( $_SERVER['HTTP_X_FORWARDED_SSL'] ) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) === 'on') ) {
         $protocol = 'https';
-        $_SERVER['HTTPS'] = 'on';
+        $_SERVER['HTTPS'] = 'on'; // Paksa status HTTPS aktif untuk WP
+    }
+
+    // PAKSA HTTP UNTUK LOKAL (Mencegah ERR_CONNECTION_REFUSED / SSL Handshake failure di port 8000)
+    if (strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false || strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) {
+        $protocol = 'http';
+        $_SERVER['HTTPS'] = 'off';
+        define('FORCE_SSL_ADMIN', false);
     }
 
     define( 'WP_HOME', $protocol . '://' . $_SERVER['HTTP_HOST'] );
     define( 'WP_SITEURL', $protocol . '://' . $_SERVER['HTTP_HOST'] );
+    
+    // Cegah WP-Cron hang (unresponsive) ketika dijalankan lokal di port 8000
+    if (strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false || strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) {
+        define('DISABLE_WP_CRON', true);
+        define('WP_HTTP_BLOCK_EXTERNAL', true);
+        define('WP_ACCESSIBLE_HOSTS', 'api.wordpress.org,*.wordpress.org');
+    }
 }
 
 // Tambahkan cookie domain untuk mencegah masalah redirect auth
