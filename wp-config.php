@@ -102,15 +102,32 @@ define( 'WP_DEBUG', false );
 
 // Konfigurasi ini mengatur URL aplikasi secara otomatis, sangat berguna jika
 // memindahkan dari localhost ke VPS production (mencegah error gambar hilang/CSS rusak)
+
+// Jika berada di belakang reverse proxy (seperti Nginx/Cloudflare), ambil host yang asli
+if ( isset( $_SERVER['HTTP_X_FORWARDED_HOST'] ) ) {
+    $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
+}
+
 if ( isset( $_SERVER['HTTP_HOST'] ) ) {
     $protocol = ( ! empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443 ) ? 'https' : 'http';
     if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) {
         $protocol = 'https';
         $_SERVER['HTTPS'] = 'on';
     }
-    define( 'WP_HOME', $protocol . '://' . $_SERVER['HTTP_HOST'] );
-    define( 'WP_SITEURL', $protocol . '://' . $_SERVER['HTTP_HOST'] );
+    
+    // Hapus port jika ada di HTTP_HOST (misalnya ipmtangsel.or.id:8000 -> ipmtangsel.or.id)
+    $host = $_SERVER['HTTP_HOST'];
+    if ( strpos( $host, ':' ) !== false ) {
+        $host_parts = explode( ':', $host );
+        $host = $host_parts[0];
+    }
+
+    define( 'WP_HOME', $protocol . '://' . $host );
+    define( 'WP_SITEURL', $protocol . '://' . $host );
 }
+
+// Tambahkan ini untuk membantu proses login jika masih nyangkut ke domain/IP lama
+define( 'RELOCATE', true );
 
 /* That's all, stop editing! Happy publishing. */
 
