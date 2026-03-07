@@ -18,15 +18,26 @@
  * @package WordPress
  */
 
+// Load environment variables from .env if it exists
+if ( file_exists( __DIR__ . '/.env' ) ) {
+    $env_vars = parse_ini_file( __DIR__ . '/.env' );
+    if ( $env_vars ) {
+        foreach ( $env_vars as $key => $value ) {
+            $_ENV[$key] = $value;
+            putenv("$key=$value");
+        }
+    }
+}
+
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'ipm_tangsel_db' );
+define( 'DB_NAME', getenv('DB_NAME') ?: 'ipm_tangsel_db' );
 
 /** Database username */
-define( 'DB_USER', 'ipm_user' );
+define( 'DB_USER', getenv('DB_USER') ?: 'ipm_user' );
 
 /** Database password */
-define( 'DB_PASSWORD', 'ipm_password' );
+define( 'DB_PASSWORD', getenv('DB_PASSWORD') ?: 'ipm_password' );
 
 /** Database hostname */
 define( 'DB_HOST', 'db' );
