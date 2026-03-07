@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  db:
+    image: mariadb:10.6
+    container_name: ipm_db
+    restart: always
+    environment:
+      # KONFIGURASI DATABASE
+      # Ganti password ini jika untuk server produksi sungguhan
+      MYSQL_ROOT_PASSWORD: root_password_rahasia
+      MYSQL_DATABASE: ipm_tangsel_db
+      MYSQL_USER: ipm_user
+      MYSQL_PASSWORD: ipm_password
+    volumes:
+      - db_data:/var/lib/mysql
+
+  wordpress:
+    build: .
+    container_name: ipm_wordpress
+    restart: always
+    ports:
+      # Port 8080 di laptop akan diarahkan ke port 80 di container
+      # Buka website menggunakan: http://localhost:8080
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: ipm_user
+      WORDPRESS_DB_PASSWORD: ipm_password
+      WORDPRESS_DB_NAME: ipm_tangsel_db
+    volumes:
+      # Sinkronisasi folder lokal ini langsung ke dalam server container
+      - .:/var/www/html
+    depends_on:
+      - db
+
+# Volume persisten agar data database tabel tidak hilang saat container dimatikan
+volumes:
+  db_data:
