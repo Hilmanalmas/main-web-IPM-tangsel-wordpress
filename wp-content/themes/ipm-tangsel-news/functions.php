@@ -257,3 +257,9 @@ function ipm_admin_login_favicon() {
 }
 add_action('login_head', 'ipm_admin_login_favicon');
 add_action('admin_head', 'ipm_admin_login_favicon');
+
+// Mematikan pembuatan otomatis thumbnail PDF untuk mencegah error 500 saat upload media
+function ipm_disable_pdf_thumbnails() {
+    return array();
+}
+add_filter('fallback_image_sizes', 'ipm_disable_pdf_thumbnails');
