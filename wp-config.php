@@ -18,18 +18,29 @@
  * @package WordPress
  */
 
+// Load environment variables from .env if it exists
+if ( file_exists( __DIR__ . '/.env' ) ) {
+    $env_vars = parse_ini_file( __DIR__ . '/.env' );
+    if ( $env_vars ) {
+        foreach ( $env_vars as $key => $value ) {
+            $_ENV[$key] = $value;
+            putenv("$key=$value");
+        }
+    }
+}
+
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'wordpress_db' );
+define( 'DB_NAME', getenv('DB_NAME') ?: 'ipm_tangsel_db' );
 
 /** Database username */
-define( 'DB_USER', 'root' );
+define( 'DB_USER', getenv('DB_USER') ?: 'ipm_user' );
 
 /** Database password */
-define( 'DB_PASSWORD', '' );
+define( 'DB_PASSWORD', getenv('DB_PASSWORD') ?: 'ipm_password' );
 
 /** Database hostname */
-define( 'DB_HOST', getenv('WORDPRESS_DB_HOST') ? getenv('WORDPRESS_DB_HOST') : 'localhost' );
+define( 'DB_HOST', getenv('WORDPRESS_DB_HOST') ?: (getenv('DB_HOST') ?: 'localhost') );
 
 /** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8mb4' );
@@ -85,11 +96,72 @@ $table_prefix = 'wp_';
  *
  * @link https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/
  */
-define( 'WP_DEBUG', false );
+define( 'WP_DEBUG', true );
+define( 'WP_DEBUG_LOG', true );
+define( 'WP_DEBUG_DISPLAY', false );
 
 /* Add any custom values between this line and the "stop editing" line. */
 
+// Konfigurasi ini mengatur URL aplikasi secara otomatis, sangat berguna jika
+// memindahkan dari localhost ke VPS production (mencegah error gambar hilang/CSS rusak)
 
+// Dukungan untuk Reverse Proxy (Nginx / Cloudflare VPS)
+// Ini adalah kunci agar saat di-deploy ke VPS, WordPress tahu domain aslinya (ipmtangsel.or.id)
+if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+    $proxy_host = $_SERVER['HTTP_X_FORWARDED_HOST'];
+    // Ambil host pertama jika ada banyak proxy
+    $proxy_host = explode(',', $proxy_host)[0];
+    $_SERVER['HTTP_HOST'] = trim($proxy_host);
+}
+
+// Gunakan HTTP_HOST yang dikirim oleh browser (atau proxy)
+if ( isset( $_SERVER['HTTP_HOST'] ) ) {
+    $protocol = 'http';
+    if ( (isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off') || 
+         (isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') ||
+         (isset( $_SERVER['HTTP_X_FORWARDED_SSL'] ) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) === 'on') ) {
+        $protocol = 'https';
+        $_SERVER['HTTPS'] = 'on'; // Paksa status HTTPS aktif untuk WP
+    }
+
+    // PAKSA HTTP UNTUK LOKAL (Mencegah ERR_CONNECTION_REFUSED / SSL Handshake failure di port 8000)
+    if (strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false || strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) {
+        $protocol = 'http';
+        $_SERVER['HTTPS'] = 'off';
+        define('FORCE_SSL_ADMIN', false);
+    }
+
+    // Jika WP_SITE_URL spesifik diatur di .env (misalnya, https://ipmtangsel.or.id), 
+    // maka gunakan HANYA itu, abaikan HTTP_HOST agar redirect tidak nyasar ke localhost.
+    $env_site_url = getenv('WP_SITE_URL');
+    
+    if ($env_site_url && $env_site_url !== 'http://127.0.0.1:8000') {
+        // Mode Produksi (VPS) / Hardcoded Domain
+        define( 'WP_HOME', $env_site_url );
+        define( 'WP_SITEURL', $env_site_url );
+        $cookie_host = parse_url($env_site_url, PHP_URL_HOST);
+        define('COOKIE_DOMAIN', $cookie_host);
+    } else {
+        // Mode Pengembangan (Localhost dinamis)
+        $final_url = $protocol . '://' . $_SERVER['HTTP_HOST'];
+        define( 'WP_HOME', $final_url );
+        define( 'WP_SITEURL', $final_url );
+        
+        $cookie_host = $_SERVER['HTTP_HOST'];
+        if (!in_array($cookie_host, ['localhost', '127.0.0.1', 'localhost:8000', '127.0.0.1:8000'])) {
+            define('COOKIE_DOMAIN', $cookie_host);
+        }
+    }
+    
+    // Cegah WP-Cron hang (unresponsive) ketika dijalankan lokal di localhost
+    if (strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false || strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) {
+        define('DISABLE_WP_CRON', true);
+        define('WP_HTTP_BLOCK_EXTERNAL', true);
+        define('WP_ACCESSIBLE_HOSTS', 'api.wordpress.org,*.wordpress.org');
+    }
+}
+
+define('WP_HOME_OVERRIDE', true);
 
 /* That's all, stop editing! Happy publishing. */
 

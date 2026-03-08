@@ -1027,6 +1027,23 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ==========================================================================
+   Content Typography (Inner Post/Page styling)
+   ========================================================================== */
+.content-typography a {
+  color: var(--secondary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 133, 27, 0.4);
+  text-underline-offset: 4px;
+  transition: all 0.2s ease;
+}
+
+.content-typography a:hover {
+  text-decoration-color: var(--secondary);
+  background-color: rgba(255, 133, 27, 0.1);
+}
+
+/* ==========================================================================
    Responsive Embedded Content (YouTube, etc)
    ========================================================================== */
 .wp-block-embed-youtube iframe,
