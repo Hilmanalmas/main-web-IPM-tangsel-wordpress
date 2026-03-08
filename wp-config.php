@@ -131,15 +131,19 @@ if ( isset( $_SERVER['HTTP_HOST'] ) ) {
         define('FORCE_SSL_ADMIN', false);
     }
 
-    // Jika WP_SITE_URL spesifik diatur di .env (misalnya, https://ipmtangsel.or.id), 
-    // maka gunakan HANYA itu, abaikan HTTP_HOST agar redirect tidak nyasar ke localhost.
-    $env_site_url = getenv('WP_SITE_URL');
+    // Ambil WP_SITE_URL prioritas utama dari $_ENV (hasil parse_ini_file) lalu getenv, karena getenv() bisa kosong di beberapa setup PHP.
+    $env_site_url = isset($_ENV['WP_SITE_URL']) ? $_ENV['WP_SITE_URL'] : getenv('WP_SITE_URL');
     
-    if ($env_site_url && $env_site_url !== 'http://127.0.0.1:8000') {
+    if ($env_site_url && strpos($env_site_url, '127.0.0.1') === false && strpos($env_site_url, 'localhost') === false) {
         // Mode Produksi (VPS) / Hardcoded Domain
-        define( 'WP_HOME', $env_site_url );
-        define( 'WP_SITEURL', $env_site_url );
-        $cookie_host = parse_url($env_site_url, PHP_URL_HOST);
+        define( 'WP_HOME', rtrim($env_site_url, '/') );
+        define( 'WP_SITEURL', rtrim($env_site_url, '/') );
+        
+        // Memaksa HTTP_HOST mengikuti env agar tidak nyasar ke localhost karena Nginx yang kurang set header
+        $parsed_host = parse_url($env_site_url, PHP_URL_HOST);
+        $_SERVER['HTTP_HOST'] = $parsed_host;
+        
+        $cookie_host = $parsed_host;
         define('COOKIE_DOMAIN', $cookie_host);
     } else {
         // Mode Pengembangan (Localhost dinamis)
@@ -172,3 +176,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';
+

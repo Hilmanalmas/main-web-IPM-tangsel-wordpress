@@ -29,12 +29,15 @@ services:
       WORDPRESS_DB_USER: ${DB_USER:-ipm_user}
       WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:-ipm_password}
       WORDPRESS_DB_NAME: ${DB_NAME:-ipm_tangsel_db}
+      WP_SITE_URL: ${WP_SITE_URL:-https://ipmtangsel.or.id}
     volumes:
-      # Sinkronisasi folder lokal ini langsung ke dalam server container
-      - .:/var/www/html
+      # Gunakan docker volume persisten agar tidak menimpa permissions yang sudah diset di Dockerfile
+      - wp_data:/var/www/html
     depends_on:
       - db
 
-# Volume persisten agar data database tabel tidak hilang saat container dimatikan
+# Volume persisten agar data database tabel dan file wp-content tidak hilang saat container dimatikan
 volumes:
   db_data:
+  wp_data:
+
