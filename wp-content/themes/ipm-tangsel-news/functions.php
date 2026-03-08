@@ -220,20 +220,33 @@ function ipm_custom_document_title_parts($title) {
 }
 add_filter('document_title_parts', 'ipm_custom_document_title_parts');
 
-// Limit Image Upload Size to 3MB
-function ipm_limit_image_upload_size($file) {
-    // Check if the uploaded file is an image
+// Limit Image and Document Upload Size
+function ipm_limit_custom_upload_size($file) {
+    // 1. Batas untuk Gambar (3 MB)
     if (strpos($file['type'], 'image') !== false) {
-        // Set limit to 3 Megabytes (3 * 1024 * 1024 bytes)
-        $size_limit = 3145728; 
-
+        $size_limit = 3145728; // 3 * 1024 * 1024 bytes
         if ($file['size'] > $size_limit) {
-            $file['error'] = 'Gagal mengunggah foto: Ukuran foto melampaui batas maksimal sebesar 3MB. Harap kompres ukuran foto Anda.';
+            $file['error'] = 'Gagal mengunggah foto: Ukuran gambar melampaui batas maksimal sebesar 3MB. Harap kompres ukuran gambar Anda.';
+        }
+    } 
+    // 2. Batas untuk Dokumen / PDF (Misal: 15 MB)
+    elseif (strpos($file['type'], 'application/') !== false || strpos($file['type'], 'text/') !== false) {
+        $size_limit = 15728640; // 15 * 1024 * 1024 bytes
+        if ($file['size'] > $size_limit) {
+            $file['error'] = 'Gagal mengunggah dokumen: Ukuran dokumen melampaui batas maksimal sebesar 15MB. Harap perkecil ukuran file Anda.';
         }
     }
+    // 3. Batas untuk Video/Audio (Opsional, misal dibatasi 50MB)
+    elseif (strpos($file['type'], 'video/') !== false || strpos($file['type'], 'audio/') !== false) {
+        $size_limit = 52428800; // 50 * 1024 * 1024 bytes
+        if ($file['size'] > $size_limit) {
+            $file['error'] = 'Gagal mengunggah media: Ukuran Video/Audio melampaui batas maksimal 50MB.';
+        }
+    }
+
     return $file;
 }
-add_filter('wp_handle_upload_prefilter', 'ipm_limit_image_upload_size');
+add_filter('wp_handle_upload_prefilter', 'ipm_limit_custom_upload_size');
 
 // Add Favicon to Admin and Login Pages
 function ipm_admin_login_favicon() {
