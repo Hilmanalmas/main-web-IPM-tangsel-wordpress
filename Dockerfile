@@ -2,8 +2,8 @@
 FROM wordpress:6-php8.2-apache
 
 # Mengubah batas memori dan upload default untuk memastikan performa yang baik
-RUN echo "upload_max_filesize = 200M" > /usr/local/etc/php/conf.d/uploads.ini && \
-    echo "post_max_size = 200M" >> /usr/local/etc/php/conf.d/uploads.ini && \
+RUN echo "upload_max_filesize = 1024M" > /usr/local/etc/php/conf.d/uploads.ini && \
+    echo "post_max_size = 1024M" >> /usr/local/etc/php/conf.d/uploads.ini && \
     echo "memory_limit = 1024M" >> /usr/local/etc/php/conf.d/uploads.ini
 
 # Mengaktifkan Apache mod_rewrite untuk Permalinks WordPress yang rapi
