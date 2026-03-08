@@ -121,9 +121,8 @@ if ( isset( $_SERVER['HTTP_HOST'] ) ) {
          (isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') ||
          (isset( $_SERVER['HTTP_X_FORWARDED_SSL'] ) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) === 'on') ) {
         $protocol = 'https';
+		$_SERVER['HTTPS'] = 'on'; // Paksa status HTTPS aktif untuk WP
     }
-	 $_SERVER['HTTPS'] = 'on'; // Paksa status HTTPS aktif untuk WP
-
     // PAKSA HTTP UNTUK LOKAL (Mencegah ERR_CONNECTION_REFUSED / SSL Handshake failure di port 8000)
     if (strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false || strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) {
         $protocol = 'http';
