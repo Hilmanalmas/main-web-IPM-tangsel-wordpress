@@ -29,7 +29,7 @@
                 <ul class="footer-links">
                     <li><a href="#">Pendaftaran Kegiatan</a></li>
                     <li><a href="https://drive.google.com/drive/folders/1zGS_OuifdQl6pc_ho3dYd4o-kZKc4O_c?usp=sharing">Galeri Kegiatan</a></li>
-                    <li><a href="#">E-Voting</a></li>
+                    <li><a href="https://evoting.ipmtangsel.or.id/">E-Voting</a></li>
                 </ul>
             </div>
 

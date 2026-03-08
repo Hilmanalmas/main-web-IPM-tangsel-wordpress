@@ -195,3 +195,27 @@ function ipm_include_custom_post_types_in_search($query) {
     return $query;
 }
 add_action('pre_get_posts', 'ipm_include_custom_post_types_in_search');
+
+// Custom Document Title
+function ipm_custom_document_title_separator($sep) {
+    return '|';
+}
+add_filter('document_title_separator', 'ipm_custom_document_title_separator');
+
+function ipm_custom_document_title_parts($title) {
+    $site_name = 'IPM Tangsel';
+    
+    // Set consistent site name
+    $title['site'] = $site_name;
+    
+    // For front page or home, we can optionally define a tagline
+    if (is_front_page() || is_home()) {
+        $title['tagline'] = 'Ikatan Pelajar Muhammadiyah Tangerang Selatan';
+    } else {
+        // Remove tagline from internal pages for cleaner title: Page Name | IPM Tangsel
+        unset($title['tagline']);
+    }
+    
+    return $title;
+}
+add_filter('document_title_parts', 'ipm_custom_document_title_parts');

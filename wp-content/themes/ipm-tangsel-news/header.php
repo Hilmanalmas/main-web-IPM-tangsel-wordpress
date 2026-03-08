@@ -8,6 +8,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Modern Fonts: Inter for UI, Space Grotesk/Outfit for Display -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="<?php echo esc_url( home_url( '/wp-content/uploads/2026/03/Logo_PD_IPM.png' ) ); ?>" sizes="32x32" />
+    <link rel="icon" href="<?php echo esc_url( home_url( '/wp-content/uploads/2026/03/Logo_PD_IPM.png' ) ); ?>" sizes="192x192" />
+    <link rel="apple-touch-icon" href="<?php echo esc_url( home_url( '/wp-content/uploads/2026/03/Logo_PD_IPM.png' ) ); ?>" />
+
     <!-- Custom theme styles -->
     <link rel="stylesheet" href="<?php echo get_stylesheet_uri(); ?>">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/style-pages.css">
