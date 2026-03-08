@@ -234,3 +234,13 @@ function ipm_limit_image_upload_size($file) {
     return $file;
 }
 add_filter('wp_handle_upload_prefilter', 'ipm_limit_image_upload_size');
+
+// Add Favicon to Admin and Login Pages
+function ipm_admin_login_favicon() {
+    $favicon_url = esc_url( home_url( '/wp-content/uploads/2026/03/Logo_PD_IPM.png' ) );
+    echo '<link rel="icon" href="' . $favicon_url . '" sizes="32x32" />' . "\n";
+    echo '<link rel="icon" href="' . $favicon_url . '" sizes="192x192" />' . "\n";
+    echo '<link rel="apple-touch-icon" href="' . $favicon_url . '" />' . "\n";
+}
+add_action('login_head', 'ipm_admin_login_favicon');
+add_action('admin_head', 'ipm_admin_login_favicon');
