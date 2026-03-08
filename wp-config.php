@@ -132,16 +132,28 @@ if ( isset( $_SERVER['HTTP_HOST'] ) ) {
     }
 
     // Jika WP_SITE_URL spesifik diatur di .env (misalnya, https://ipmtangsel.or.id), 
-    // maka gunakan itu. Jika tidak, ambil dari URL yg diketikkan di browser.
-    $final_url = getenv('WP_SITE_URL');
-    if (!$final_url) {
-        $final_url = $protocol . '://' . $_SERVER['HTTP_HOST'];
-    }
-
-    define( 'WP_HOME', $final_url );
-    define( 'WP_SITEURL', $final_url );
+    // maka gunakan HANYA itu, abaikan HTTP_HOST agar redirect tidak nyasar ke localhost.
+    $env_site_url = getenv('WP_SITE_URL');
     
-    // Cegah WP-Cron hang (unresponsive) ketika dijalankan lokal di port 8000
+    if ($env_site_url && $env_site_url !== 'http://127.0.0.1:8000') {
+        // Mode Produksi (VPS) / Hardcoded Domain
+        define( 'WP_HOME', $env_site_url );
+        define( 'WP_SITEURL', $env_site_url );
+        $cookie_host = parse_url($env_site_url, PHP_URL_HOST);
+        define('COOKIE_DOMAIN', $cookie_host);
+    } else {
+        // Mode Pengembangan (Localhost dinamis)
+        $final_url = $protocol . '://' . $_SERVER['HTTP_HOST'];
+        define( 'WP_HOME', $final_url );
+        define( 'WP_SITEURL', $final_url );
+        
+        $cookie_host = $_SERVER['HTTP_HOST'];
+        if (!in_array($cookie_host, ['localhost', '127.0.0.1', 'localhost:8000', '127.0.0.1:8000'])) {
+            define('COOKIE_DOMAIN', $cookie_host);
+        }
+    }
+    
+    // Cegah WP-Cron hang (unresponsive) ketika dijalankan lokal di localhost
     if (strpos($_SERVER['HTTP_HOST'], '127.0.0.1') !== false || strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) {
         define('DISABLE_WP_CRON', true);
         define('WP_HTTP_BLOCK_EXTERNAL', true);
@@ -149,14 +161,6 @@ if ( isset( $_SERVER['HTTP_HOST'] ) ) {
     }
 }
 
-// Ekstrak domain dari $final_url untuk keperluan COOKIE_DOMAIN
-$cookie_host = parse_url(defined('WP_HOME') ? WP_HOME : 'http://' . $_SERVER['HTTP_HOST'], PHP_URL_HOST);
-
-// Tambahkan cookie domain untuk mencegah masalah redirect auth
-// Jangan definisikan COOKIE_DOMAIN jika localhost/127.0.0.1 karena WordPress sering mem-blokirnya
-if (!in_array($cookie_host, ['localhost', '127.0.0.1'])) {
-    define('COOKIE_DOMAIN', $cookie_host);
-}
 define('WP_HOME_OVERRIDE', true);
 
 /* That's all, stop editing! Happy publishing. */
