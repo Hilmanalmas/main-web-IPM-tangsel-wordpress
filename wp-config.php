@@ -165,6 +165,7 @@ if ( isset( $_SERVER['HTTP_HOST'] ) ) {
 }
 
 define('WP_HOME_OVERRIDE', true);
+define('CONCATENATE_SCRIPTS', false);
 
 /* That's all, stop editing! Happy publishing. */
 
