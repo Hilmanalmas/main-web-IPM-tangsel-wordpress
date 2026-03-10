@@ -53,7 +53,16 @@ get_header(); ?>
                     <div style="width: 60px; height: 4px; background: var(--secondary); margin: 16px auto 0; border-radius: 2px;"></div>
                 </div>
 
-                <?php the_content(); ?>
+                <?php 
+                $content = get_the_content();
+                $susunan_custom = get_post_meta(get_the_ID(), '_struktur_susunan_pengurus', true);
+
+                if ( !empty($content) ) {
+                    the_content(); 
+                } elseif ( !empty($susunan_custom) ) {
+                    echo wpautop( $susunan_custom );
+                }
+                ?>
 
                 <div class="text-center" style="margin-top: 60px;">
                     <a href="<?php echo site_url('/struktur-organisasi'); ?>" style="display: inline-flex; align-items: center; gap: 8px; background: var(--bg-main); color: var(--text-main); padding: 12px 24px; border-radius: 100px; font-weight: 600; border: 1px solid var(--border-light); transition: all 0.2s;">

@@ -80,11 +80,21 @@ function ipm_struktur_metabox_callback($post) {
     wp_nonce_field('struktur_save_meta', 'struktur_meta_nonce');
     $nama = get_post_meta($post->ID, '_struktur_nama_ketua', true);
     $periode = get_post_meta($post->ID, '_struktur_periode', true);
-    echo '<p><label for="struktur_nama_ketua">Nama Ketua Umum (Misal: Riandy Prawita):</label><br>';
+    $susunan = get_post_meta($post->ID, '_struktur_susunan_pengurus', true);
+
+    echo '<p><label for="struktur_nama_ketua"><strong>Nama Ketua Umum (Misal: Riandy Prawita):</strong></label><br>';
     echo '<input type="text" id="struktur_nama_ketua" name="struktur_nama_ketua" value="' . esc_attr($nama) . '" style="width:100%;"></p>';
-    echo '<p><label for="struktur_periode">Periode (Misal: 2023-2025):</label><br>';
+    
+    echo '<p><label for="struktur_periode"><strong>Periode (Misal: 2023-2025):</strong></label><br>';
     echo '<input type="text" id="struktur_periode" name="struktur_periode" value="' . esc_attr($periode) . '" style="width:100%;"></p>';
-    echo '<p><em>Catatan: Gunakan fitur "Featured Image" (Gambar Andalan) di sebelah kanan layar untuk menambahkan foto profil Ketua Umum. Isi susunan struktur organisasi pada kotak teks/editor di atas.</em></p>';
+    
+    echo '<hr style="margin: 20px 0;">';
+    
+    echo '<p><label for="struktur_susunan_pengurus"><strong>Susunan Pengurus Daerah Lainnya:</strong></label><br>';
+    echo '<em>Karena kotak editor di atas sedang rusak/membeku, silakan ketik semua susunan pengurus (Sekretaris, Bendahara, Bidang-bidang) di kotak ini secara manual. Anda bisa menggunakan Enter untuk paragraf baru. Jika butuh huruf tebal, ketik <code>&lt;strong&gt;Teks Tebal&lt;/strong&gt;</code> di awal kalimat.</em><br>';
+    echo '<textarea id="struktur_susunan_pengurus" name="struktur_susunan_pengurus" rows="15" style="width:100%; margin-top:10px;">' . esc_textarea($susunan) . '</textarea></p>';
+    
+    echo '<p><em>Catatan: Gunakan fitur "Featured Image" (Gambar Andalan) di sebelah kanan layar untuk menambahkan foto profil Ketua Umum.</em></p>';
 }
 
 function ipm_struktur_save_meta($post_id) {
@@ -94,6 +104,7 @@ function ipm_struktur_save_meta($post_id) {
 
     if (isset($_POST['struktur_nama_ketua'])) update_post_meta($post_id, '_struktur_nama_ketua', sanitize_text_field($_POST['struktur_nama_ketua']));
     if (isset($_POST['struktur_periode'])) update_post_meta($post_id, '_struktur_periode', sanitize_text_field($_POST['struktur_periode']));
+    if (isset($_POST['struktur_susunan_pengurus'])) update_post_meta($post_id, '_struktur_susunan_pengurus', wp_kses_post($_POST['struktur_susunan_pengurus']));
 }
 add_action('save_post_struktur', 'ipm_struktur_save_meta');
 
