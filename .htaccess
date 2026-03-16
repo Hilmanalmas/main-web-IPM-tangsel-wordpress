@@ -1,4 +1,11 @@
 
+# Pengaturan PHP - Naikkan batas resource server
+php_value memory_limit 256M
+php_value upload_max_filesize 64M
+php_value post_max_size 64M
+php_value max_execution_time 300
+php_value max_input_time 300
+
 # BEGIN WordPress
 # Arahan (baris) antara "BEGIN WordPress" dan "END WordPress"
 # dihasilkan secara dinamis, dan hanya dapat dimodifikasi melalui filter WordPress.
