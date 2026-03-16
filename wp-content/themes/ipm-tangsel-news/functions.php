@@ -274,3 +274,13 @@ function ipm_disable_pdf_thumbnails() {
     return array();
 }
 add_filter('fallback_image_sizes', 'ipm_disable_pdf_thumbnails');
+
+// Nonaktifkan auto-resize gambar besar (>2560px) agar server tidak OOM saat upload
+// Gambar asli tetap disimpan utuh tanpa pemrosesan scaling yang berat
+add_filter( 'big_image_size_threshold', '__return_false' );
+
+// Tambah memory limit saat proses upload/edit gambar
+add_filter( 'wp_image_editors', function( $editors ) {
+    @ini_set( 'memory_limit', '256M' );
+    return $editors;
+} );
