@@ -167,6 +167,13 @@ if ( isset( $_SERVER['HTTP_HOST'] ) ) {
 define('WP_HOME_OVERRIDE', true);
 define('CONCATENATE_SCRIPTS', false);
 
+// Pengaturan batas ukuran file yang bisa di-upload
+@ini_set( 'upload_max_filesize', '64M' );
+@ini_set( 'post_max_size', '64M' );
+@ini_set( 'memory_limit', '256M' );
+@ini_set( 'max_execution_time', '300' );
+@ini_set( 'max_input_time', '300' );
+
 /* That's all, stop editing! Happy publishing. */
 
 /** Absolute path to the WordPress directory. */
