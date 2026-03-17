@@ -396,6 +396,42 @@
 
 </main>
 
+<!-- Ketua Carousel Navigation Script -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const track    = document.querySelector('.ketua-track');
+    const prevBtn  = document.querySelector('.prev-arrow');
+    const nextBtn  = document.querySelector('.next-arrow');
+
+    if (!track || !prevBtn || !nextBtn) return;
+
+    // Slide width = full width of the track container
+    function getSlideWidth() {
+        const slide = track.querySelector('.ketua-slide');
+        return slide ? slide.offsetWidth + parseInt(getComputedStyle(track).gap || 40) : track.offsetWidth;
+    }
+
+    nextBtn.addEventListener('click', () => {
+        track.scrollBy({ left: getSlideWidth(), behavior: 'smooth' });
+    });
+
+    prevBtn.addEventListener('click', () => {
+        track.scrollBy({ left: -getSlideWidth(), behavior: 'smooth' });
+    });
+
+    // Update arrow visibility
+    function updateArrows() {
+        const atStart = track.scrollLeft <= 10;
+        const atEnd   = track.scrollLeft + track.offsetWidth >= track.scrollWidth - 10;
+        prevBtn.style.opacity = atStart ? '0.3' : '1';
+        nextBtn.style.opacity = atEnd   ? '0.3' : '1';
+    }
+
+    track.addEventListener('scroll', updateArrows);
+    updateArrows();
+});
+</script>
+
 <!-- Counter Up Animation Script -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
