@@ -119,8 +119,8 @@ function ipm_agenda_metabox_callback($post) {
     $date = get_post_meta($post->ID, '_agenda_date', true);
     $time = get_post_meta($post->ID, '_agenda_time', true);
     $location = get_post_meta($post->ID, '_agenda_location', true);
-    echo '<p><label for="agenda_date">Tanggal (Misal: 05 Feb atau 2026-02-05):</label><br>';
-    echo '<input type="text" id="agenda_date" name="agenda_date" value="' . esc_attr($date) . '" style="width:100%;"></p>';
+    echo '<p><label for="agenda_date">Tanggal (Bisa berupa rentang, Misal: 1-3 April 2026 atau 2026-02-05):</label><br>';
+    echo '<input type="text" id="agenda_date" name="agenda_date" value="' . esc_attr($date) . '" style="width:100%;" placeholder="Contoh: 1-3 April 2026 atau 5 Mar"></p>';
     echo '<p><label for="agenda_time">Waktu (Misal: 08:00 - 15:00):</label><br>';
     echo '<input type="text" id="agenda_time" name="agenda_time" value="' . esc_attr($time) . '" style="width:100%;"></p>';
     echo '<p><label for="agenda_location">Lokasi:</label><br>';

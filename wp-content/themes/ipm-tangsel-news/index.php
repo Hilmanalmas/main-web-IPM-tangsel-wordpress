@@ -235,24 +235,35 @@
                                 $agenda_time = get_post_meta(get_the_ID(), '_agenda_time', true);
                                 $agenda_loc  = get_post_meta(get_the_ID(), '_agenda_location', true);
 
-                                $time_timestamp = strtotime($agenda_date);
-                                if ($time_timestamp) {
-                                    $month_str = date_i18n('M', $time_timestamp);
-                                    $day_str = date_i18n('d', $time_timestamp);
-                                } else {
-                                    $parts = explode(' ', $agenda_date);
-                                    $day_str = isset($parts[0]) && !empty($parts[0]) ? $parts[0] : '-';
-                                    $month_str = isset($parts[1]) ? substr($parts[1], 0, 3) : '-';
-                                    if (empty($agenda_date)) {
-                                        $month_str = 'TBA'; $day_str = '-';
+                                // Try to handle ranges like "1-3 April 2026"
+                                $day_str = '-';
+                                $month_str = 'TBA';
+
+                                if (!empty($agenda_date)) {
+                                    $time_timestamp = strtotime($agenda_date);
+                                    if ($time_timestamp) {
+                                        $month_str = date_i18n('M', $time_timestamp);
+                                        $day_str = date_i18n('d', $time_timestamp);
+                                    } else {
+                                        // Manual parsing for strings like "1-3 April 2026" or "10-12 Mar"
+                                        // Pattern: looks for day range at start, then word for month
+                                        if (preg_match('/^([0-9\-\s]+)([a-zA-Z]+)/', $agenda_date, $matches)) {
+                                            $day_str = trim($matches[1]);
+                                            $month_str = substr(trim($matches[2]), 0, 3);
+                                        } else {
+                                            // Fallback to split parts
+                                            $parts = explode(' ', trim($agenda_date));
+                                            $day_str = !empty($parts[0]) ? $parts[0] : '-';
+                                            $month_str = isset($parts[1]) ? substr($parts[1], 0, 3) : '-';
+                                        }
                                     }
                                 }
                         ?>
                                 <div class="agenda-item" style="display: flex; gap: 20px; align-items: flex-start;">
-                                    <div class="agenda-date-box" style="background-color: var(--primary); color: #fff; width: 70px; text-align: center; border-radius: 8px; padding: 12px 0; flex-shrink: 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.1);">
-                                        <div class="agenda-month" style="font-size: 14px; font-weight: 600; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 4px; margin-bottom: 4px; color: var(--accent);"><?php echo esc_html($month_str); ?></div>
-                                        <div class="agenda-day" style="font-size: 24px; font-weight: 800; line-height: 1;"><?php echo esc_html($day_str); ?></div>
-                                    </div>
+                                    <div class="agenda-date-box" style="background-color: var(--primary); color: #fff; width: 70px; text-align: center; border-radius: 8px; padding: 12px 0; flex-shrink: 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.1); overflow: hidden;">
+                                         <div class="agenda-month" style="font-size: 13px; font-weight: 600; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 4px; margin-bottom: 4px; color: var(--accent);"><?php echo esc_html($month_str); ?></div>
+                                         <div class="agenda-day" style="font-size: <?php echo strlen($day_str) > 2 ? '18px' : '24px'; ?>; font-weight: 800; line-height: 1; padding: 0 2px;"><?php echo esc_html($day_str); ?></div>
+                                     </div>
                                     <div class="agenda-details" style="padding-top: 4px;">
                                         <h3 class="agenda-heading" style="color: var(--bg-surface); font-size: 18px; margin: 0 0 8px 0; font-weight: 700;">
                                             <a href="<?php the_permalink(); ?>" style="color: inherit; text-decoration: none;"><?php the_title(); ?></a>
