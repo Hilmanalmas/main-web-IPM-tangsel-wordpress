@@ -422,23 +422,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     nextBtn.addEventListener('click', () => {
-        track.scrollBy({ left: getSlideWidth(), behavior: 'smooth' });
+        const isAtEnd = track.scrollLeft + track.offsetWidth >= track.scrollWidth - 10;
+        if (isAtEnd) {
+            track.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+            track.scrollBy({ left: getSlideWidth(), behavior: 'smooth' });
+        }
     });
 
     prevBtn.addEventListener('click', () => {
-        track.scrollBy({ left: -getSlideWidth(), behavior: 'smooth' });
+        const isAtStart = track.scrollLeft <= 10;
+        if (isAtStart) {
+            track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
+        } else {
+            track.scrollBy({ left: -getSlideWidth(), behavior: 'smooth' });
+        }
     });
 
-    // Update arrow visibility
-    function updateArrows() {
-        const atStart = track.scrollLeft <= 10;
-        const atEnd   = track.scrollLeft + track.offsetWidth >= track.scrollWidth - 10;
-        prevBtn.style.opacity = atStart ? '0.3' : '1';
-        nextBtn.style.opacity = atEnd   ? '0.3' : '1';
-    }
-
-    track.addEventListener('scroll', updateArrows);
-    updateArrows();
+    // Arrows are always active in infinite mode
+    prevBtn.style.opacity = '1';
+    nextBtn.style.opacity = '1';
 });
 </script>
 
