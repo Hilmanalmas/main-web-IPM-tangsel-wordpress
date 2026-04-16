@@ -29,7 +29,6 @@ if ( post_password_required() ) {
                 'style'       => 'ol',
                 'short_ping'  => true,
                 'avatar_size' => 48,
-                'callback'    => 'ipm_custom_comment_callback' // We will define this inline or let WP do it then style it. Wait, let's just use WP default and style via CSS, or custom callback if we want tight HTML control. Better to use inline custom callback for full layout!
             ) );
             ?>
         </ol>
