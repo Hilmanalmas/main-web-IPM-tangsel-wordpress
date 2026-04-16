@@ -143,18 +143,10 @@
                                     </div>
                                 </div>
                                 
-                                <h3 class="news-title">
+                                <h3 class="news-title" style="margin-bottom: 0;">
                                     <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                                 </h3>
                                 
-                                <div class="news-excerpt">
-                                    <?php echo wp_trim_words( get_the_excerpt(), 20, '...' ); ?>
-                                </div>
-                                
-                                <a href="<?php the_permalink(); ?>" class="news-read-more">
-                                    Baca Selengkapnya
-                                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                </a>
                             </div>
                         </article>
                     <?php endwhile; ?>
