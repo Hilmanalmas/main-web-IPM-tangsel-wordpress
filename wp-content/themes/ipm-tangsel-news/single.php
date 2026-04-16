@@ -82,17 +82,17 @@ ipm_set_post_views(get_the_ID());
                         </div>
 
                         <!-- Author Bio Box -->
-                        <div class="author-bio-box" style="display: flex; align-items: center; gap: 24px; padding: 24px; background: var(--bg-main); border-radius: 12px; margin-top: 40px; margin-bottom: 20px; border: 1px solid var(--border-light);">
-                            <div class="author-avatar" style="flex-shrink: 0; display: block; overflow: hidden; border-radius: 50%; width: 80px; height: 80px; background: #ddd;">
-                                <?php echo get_avatar( get_the_author_meta('user_email'), 160, '', '', array('class' => 'avatar', 'style' => 'width: 100%; height: auto; object-fit: cover;') ); ?>
+                        <div class="author-bio-box" style="display: flex; align-items: center; gap: 16px; padding: 16px 0; margin-top: 40px; margin-bottom: 20px; border-top: 1px solid rgba(0,0,0,0.05); border-bottom: 1px solid rgba(0,0,0,0.05);">
+                            <div class="author-avatar" style="flex-shrink: 0; display: block; overflow: hidden; border-radius: 50%; width: 56px; height: 56px; background: #eee;">
+                                <?php echo get_avatar( get_the_author_meta('user_email'), 112, '', '', array('class' => 'avatar', 'style' => 'width: 100%; height: auto; object-fit: cover;') ); ?>
                             </div>
                             <div class="author-info">
-                                <h3 style="margin: 0 0 8px 0; font-size: 1.25rem; font-family: var(--font-display); font-weight: 700;">
-                                    <a href="<?php echo esc_url(get_author_posts_url(get_the_author_meta('ID'))); ?>" style="color: var(--secondary); text-decoration: none;">
+                                <h3 style="margin: 0; font-size: 1rem; font-family: var(--font-display); font-weight: 700;">
+                                    <a href="<?php echo esc_url(get_author_posts_url(get_the_author_meta('ID'))); ?>" style="color: var(--text-main); text-decoration: none;">
                                         <?php the_author(); ?>
                                     </a>
                                 </h3>
-                                <div style="color: var(--text-main); font-weight: 700; font-size: 0.95rem;">
+                                <div style="color: var(--text-muted); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">
                                     <?php echo count_user_posts( get_the_author_meta('ID') ); ?> posts
                                 </div>
                             </div>

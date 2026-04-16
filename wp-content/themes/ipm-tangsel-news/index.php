@@ -87,8 +87,15 @@
             </div>
             
             <div class="news-grid">
-                <?php if ( have_posts() ) : ?>
-                    <?php while ( have_posts() ) : the_post(); ?>
+                <?php 
+                $latest_news_query = new WP_Query(array(
+                    'post_type' => 'post',
+                    'posts_per_page' => 6,
+                    'post_status' => 'publish'
+                ));
+                if ( $latest_news_query->have_posts() ) : 
+                ?>
+                    <?php while ( $latest_news_query->have_posts() ) : $latest_news_query->the_post(); ?>
                         <article id="post-<?php the_ID(); ?>" <?php post_class('news-card'); ?>>
                             
                             <!-- Thumbnail -->
@@ -151,6 +158,7 @@
                             </div>
                         </article>
                     <?php endwhile; ?>
+                    <?php wp_reset_postdata(); ?>
                 <?php else : ?>
                     <!-- No Posts Found -->
                     <div style="grid-column: 1 / -1; text-align:center; padding: 40px; background:var(--bg-surface); border-radius: var(--radius-md);">

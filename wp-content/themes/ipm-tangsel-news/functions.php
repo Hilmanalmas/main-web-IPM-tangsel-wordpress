@@ -198,14 +198,60 @@ function ipm_set_post_views($postID) {
     }
 }
 
-// Include all custom post types in global search
+// Include all custom post types in global search and allow searching by Author
 function ipm_include_custom_post_types_in_search($query) {
-    if ($query->is_search && !is_admin() && $query->is_main_query()) {
+    if ($query->is_search() && !is_admin() && $query->is_main_query()) {
+        // 1. Include Custom Post Types
         $query->set('post_type', array('post', 'page', 'pengumuman', 'agenda', 'dokumen', 'struktur'));
+        
+        // 2. Enhance Search by Author Name
+        $search_term = $query->query_vars['s'];
+        
+        // Search for users matching the term
+        $user_args = array(
+            'search'         => '*' . $search_term . '*',
+            'search_columns' => array('user_login', 'user_nicename', 'user_email', 'user_url', 'display_name'),
+            'fields'         => 'ID'
+        );
+        $user_query = new WP_User_Query($user_args);
+        $author_ids = $user_query->get_results();
+        
+        // If authors found, modify the query to include their posts OR standard text search
+        if (!empty($author_ids)) {
+            // We use 'author__in' which will fetch ALL posts by these authors
+            // However, WP by default uses an AND condition if 's' is also present.
+            // To fix this, we'll hook into posts_search later, OR the simpler approach:
+            // Since the user asked "jika spesifik nama yg post, tampilkan semua berita yg dia upload"
+            // we will temporarily unset the 's' parameter if we are explicitly looking for authors,
+            // OR we can leave 's' but modify the SQL WHERE clause to add OR author_in.
+            // Let's use the simplest, most stable approach: add an action to modify the WHERE clause just for this query.
+            
+            $query->set('_custom_author_search_ids', $author_ids);
+            add_filter('posts_search', 'ipm_custom_posts_search_filter', 10, 2);
+        }
     }
     return $query;
 }
 add_action('pre_get_posts', 'ipm_include_custom_post_types_in_search');
+
+// SQL Filter to allow searching text OR author ID
+function ipm_custom_posts_search_filter($search, $wp_query) {
+    global $wpdb;
+    $author_ids = $wp_query->get('_custom_author_search_ids');
+    if (!empty($author_ids) && !empty($search)) {
+        remove_filter('posts_search', 'ipm_custom_posts_search_filter', 10); // Run once
+        
+        $author_list = implode(',', array_map('intval', $author_ids));
+        // Search structure typically starts with: " AND (((wp_posts.post_title LIKE ..."
+        // We want: " AND ( wp_posts.post_author IN (...) OR (((wp_posts.post_title... )"
+        $search = preg_replace('/^\s*AND\s*\(/', " AND ( ({$wpdb->posts}.post_author IN ($author_list)) OR (", $search);
+        
+        if (strpos($search, " OR (") !== false) {
+             $search .= " )"; // Close the extra parenthesis we opened
+        }
+    }
+    return $search;
+}
 
 // Custom Document Title
 function ipm_custom_document_title_separator($sep) {

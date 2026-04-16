@@ -92,31 +92,32 @@ if ( post_password_required() ) {
     margin-bottom: 24px;
 }
 .comment-list .comment-body {
-    background: white;
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.04);
-    border: 1px solid var(--border-light);
+    background: transparent;
+    padding: 16px 0;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
     position: relative;
 }
 .comment-list .comment-author {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 12px;
+    gap: 12px;
+    margin-bottom: 8px;
 }
 .comment-list .comment-author img.avatar {
     border-radius: 50%;
-    width: 48px;
-    height: 48px;
+    width: 36px;
+    height: 36px;
 }
 .comment-list .comment-author .fn {
-    font-weight: 700;
-    font-size: 1.05rem;
+    font-weight: 600;
+    font-size: 1rem;
     color: var(--text-main);
 }
 .comment-list .comment-meta {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
 }
 .comment-list .comment-meta a {
@@ -124,39 +125,43 @@ if ( post_password_required() ) {
     text-decoration: none;
 }
 .comment-list .comment-content {
-    font-size: 1rem;
+    font-size: 0.95rem;
     line-height: 1.6;
     color: var(--text-main);
+    opacity: 0.9;
 }
 .comment-list .comment-content p:last-child {
     margin-bottom: 0;
 }
 .comment-list .reply {
-    margin-top: 16px;
+    margin-top: 12px;
 }
 .comment-list .reply a {
     display: inline-block;
-    padding: 6px 16px;
-    background: rgba(0, 181, 42, 0.1);
-    color: #00b52a;
-    border-radius: 100px;
+    padding: 4px 0;
+    background: transparent;
+    color: var(--secondary);
+    border-radius: 0;
     font-size: 0.85rem;
     font-weight: 600;
     transition: all 0.2s;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
 }
 .comment-list .reply a:hover {
-    background: #00b52a;
-    color: white;
+    background: transparent;
+    color: var(--primary);
+    text-decoration-thickness: 2px;
 }
 .comment-list .children {
     list-style: none;
-    padding-left: 20px;
-    border-left: 2px solid rgba(0, 181, 42, 0.2);
-    margin-left: 24px;
-    margin-top: 24px;
+    padding-left: 32px;
+    margin-left: 0;
+    margin-top: 0;
 }
-.comment-list .children .comment:last-child {
-    margin-bottom: 0;
+.comment-list .children .comment:last-child .comment-body {
+    border-bottom: none;
 }
 
 /* Comment form focused inputs */
