@@ -351,7 +351,7 @@
                         'post_type' => 'struktur',
                         'posts_per_page' => -1,
                         'orderby' => 'date',
-                        'order' => 'DESC'
+                        'order' => 'ASC'
                     ));
 
                     if ( $struktur_query->have_posts() ) :
