@@ -350,9 +350,8 @@
                     $struktur_query = new WP_Query(array(
                         'post_type' => 'struktur',
                         'posts_per_page' => -1,
-                        'meta_key' => '_struktur_periode',
-                        'orderby' => 'meta_value',
-                        'order' => 'ASC' // Ascending or Descending based on preference
+                        'orderby' => 'date',
+                        'order' => 'DESC'
                     ));
 
                     if ( $struktur_query->have_posts() ) :
