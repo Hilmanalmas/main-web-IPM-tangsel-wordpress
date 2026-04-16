@@ -19,70 +19,61 @@ get_header(); ?>
 
     <!-- Search Results Content -->
     <section class="search-results-section" style="padding: 80px 0; background: var(--bg-main);">
-        <div class="container" style="max-width: 900px;">
+        <div class="container">
             
             <?php if ( have_posts() ) : ?>
 
-                <div class="search-results-list" style="display: flex; flex-direction: column; gap: 24px;">
+                <div class="news-grid">
                     <?php
-                    /* Start the Loop */
                     while ( have_posts() ) :
                         the_post();
                         
                         $post_type = get_post_type();
                         $type_label = 'Berita';
-                        $type_color = 'var(--primary)';
-                        $icon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>';
-
-                        if ($post_type === 'agenda') {
-                            $type_label = 'Agenda';
-                            $type_color = '#eab308'; // Yellow
-                            $icon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>';
-                        } elseif ($post_type === 'pengumuman') {
-                            $type_label = 'Pengumuman';
-                            $type_color = '#ef4444'; // Red
-                            $icon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>';
-                        } elseif ($post_type === 'dokumen') {
-                            $type_label = 'Dokumen';
-                            $type_color = '#10b981'; // Green
-                            $icon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>';
-                        } elseif ($post_type === 'struktur') {
-                            $type_label = 'Struktur Pengurus';
-                            $type_color = 'var(--secondary)'; // Orange
-                            $icon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>';
-                        } elseif ($post_type === 'page') {
-                            $type_label = 'Laman';
-                            $type_color = 'var(--text-muted)'; // Gray
-                            $icon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><polyline points="3 9 21 9"></polyline><polyline points="9 21 9 9"></polyline></svg>';
-                        }
+                        $type_color = 'var(--secondary)';
+                        
+                        if ($post_type === 'agenda') $type_label = 'Agenda';
+                        elseif ($post_type === 'pengumuman') $type_label = 'Pengumuman';
+                        elseif ($post_type === 'dokumen') $type_label = 'Dokumen';
+                        elseif ($post_type === 'struktur') $type_label = 'Struktur';
+                        elseif ($post_type === 'page') $type_label = 'Halaman';
                     ?>
-                        <article id="post-<?php the_ID(); ?>" class="search-result-item" style="background: white; border-radius: 12px; padding: 24px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); transition: all 0.2s; display: flex; flex-direction: column; gap: 12px;">
-                            
-                            <!-- Metadata Type Tag -->
-                            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 700; color: <?php echo $type_color; ?>; text-transform: uppercase;">
-                                <?php echo $icon; ?>
-                                <?php echo esc_html($type_label); ?>
-                            </div>
-
-                            <!-- Title -->
-                            <h2 style="margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; line-height: 1.3;">
-                                <a href="<?php the_permalink(); ?>" style="color: var(--text-main); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--secondary)'" onmouseout="this.style.color='var(--text-main)'">
-                                    <?php the_title(); ?>
+                        <article id="post-<?php the_ID(); ?>" <?php post_class('news-card'); ?>>
+                            <!-- Thumbnail -->
+                            <div class="news-image-wrapper">
+                                <a href="<?php the_permalink(); ?>">
+                                    <?php if ( has_post_thumbnail() ) : ?>
+                                        <?php the_post_thumbnail('medium_large', array('class' => 'news-image')); ?>
+                                    <?php else : ?>
+                                        <div class="news-image" style="background: linear-gradient(135deg, var(--bg-main) 0%, var(--border-light) 100%); display:flex; align-items:center; justify-content:center;">
+                                            <svg width="48" height="48" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v4M21 15l-4-4m4 4l-4 4"></path></svg>
+                                        </div>
+                                    <?php endif; ?>
                                 </a>
-                            </h2>
-
-                            <!-- Excerpt -->
-                            <div style="color: var(--text-muted); font-size: 1rem; line-height: 1.6;">
-                                <?php echo wp_trim_words( get_the_excerpt(), 25, '...' ); ?>
+                                <div class="news-categories" style="position: absolute; top: 16px; left: 16px;">
+                                    <span class="news-category-badge" style="position: static; background: <?php echo $type_color; ?>;"><?php echo esc_html($type_label); ?></span>
+                                </div>
                             </div>
 
+                            <div class="news-content">
+                                <div class="news-meta">
+                                    <div class="meta-item">
+                                        <svg class="meta-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        <span><?php echo get_the_date(); ?></span>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="news-title">
+                                    <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                                </h3>
+                            </div>
                         </article>
 
                     <?php endwhile; ?>
                 </div>
 
                 <!-- Pagination -->
-                <div class="pagination text-center" style="margin-top: 48px;">
+                <div class="pagination text-center" style="margin-top: 60px; justify-content: center;">
                     <?php
                     the_posts_pagination( array(
                         'mid_size'  => 2,
@@ -95,10 +86,12 @@ get_header(); ?>
             <?php else : ?>
 
                 <!-- No Results -->
-                <div style="text-align: center; padding: 80px 40px; background: white; border-radius: 24px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light);">
-                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--border-light)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 24px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    <h2 style="font-family: var(--font-display); font-size: 2rem; color: var(--text-main); margin: 0 0 16px 0;">Tidak Ada Hasil</h2>
-                    <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto 32px;">Maaf, kami tidak dapat menemukan apa pun yang cocok dengan istilah pencarian Anda. Silakan coba lagi dengan beberapa kata kunci yang berbeda.</p>
+                <div style="text-align: center; padding: 100px 40px; background: white; border-radius: 20px; border: 1px dashed var(--border-light);">
+                    <div style="width: 80px; height: 80px; background: var(--bg-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </div>
+                    <h2 style="font-family: var(--font-display); font-size: 1.75rem; color: var(--text-main); margin: 0 0 12px 0;">Pencarian Tidak Ditemukan</h2>
+                    <p style="color: var(--text-muted); font-size: 1rem; max-width: 460px; margin: 0 auto;">Kami tidak dapat menemukan hasil yang cocok untuk "<?php echo get_search_query(); ?>". Coba periksa ejaan atau gunakan kata kunci lain.</p>
                 </div>
 
             <?php endif; ?>
