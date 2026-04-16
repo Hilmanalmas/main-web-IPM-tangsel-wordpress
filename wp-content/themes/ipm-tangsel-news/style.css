@@ -1091,3 +1091,21 @@ h1, h2, h3, h4, h5, h6 {
   .footer-brand .logo-img { margin-bottom: 16px; }
 }
 
+/* Fix double/ghosting image on single news pages */
+.post-featured-image {
+    position: relative;
+    background-image: none !important;
+    z-index: 1;
+}
+
+.post-featured-image::after {
+    display: none !important;
+}
+
+.post-featured-image img {
+    position: relative;
+    z-index: 2;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+}
+
