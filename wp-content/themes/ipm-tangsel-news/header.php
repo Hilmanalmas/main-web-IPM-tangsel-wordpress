@@ -15,8 +15,8 @@
     <link rel="apple-touch-icon" href="<?php echo esc_url( home_url( '/wp-content/uploads/2026/03/Logo_PD_IPM.png' ) ); ?>" />
 
     <!-- Custom theme styles -->
-    <link rel="stylesheet" href="<?php echo get_stylesheet_uri(); ?>">
-    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/style-pages.css">
+    <link rel="stylesheet" href="<?php echo get_stylesheet_uri(); ?>?v=1.1">
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/style-pages.css?v=1.1">
     <?php wp_head(); ?>
 </head>
 
