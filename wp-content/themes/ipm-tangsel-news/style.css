@@ -1072,12 +1072,43 @@ h1, h2, h3, h4, h5, h6 {
   .nav-list { display: none; } /* Mobile menu toggle handles this */
   .mobile-menu-toggle { display: flex; }
   
-  .hero-wrapper { min-height: 80vh; }
+  .hero-wrapper { 
+    min-height: 100vh; 
+    flex-direction: column; 
+    justify-content: center;
+  }
+  .hero-content {
+    padding: 60px 0 40px; /* Reduced padding from desktop */
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+  }
   .hero-title { font-size: 3rem; }
   
-  .features-grid { grid-template-columns: 1fr; }
-  .feature-card { height: 200px; }
-  .hero-features { position: relative; bottom: 0; transform: translateY(-40px); }
+  /* Make features a horizontal swipeable row on mobile */
+  .hero-features { 
+    position: relative; 
+    bottom: 0; 
+    padding: 0 0 40px 0; 
+    width: 100%;
+  }
+  .features-grid { 
+    display: flex; 
+    flex-direction: row; 
+    overflow-x: auto; 
+    scroll-snap-type: x mandatory; 
+    gap: 16px; 
+    padding: 0 20px; 
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
+  }
+  .features-grid::-webkit-scrollbar { display: none; }
+  
+  .feature-card { 
+    flex: 0 0 85vw; /* Almost full width but peeks the next card */
+    scroll-snap-align: center;
+    height: 180px; 
+  }
   
   /* Reset News Padding since Hero Features no longer overlap drastically */
   .news-section { padding-top: 60px; }
@@ -1087,7 +1118,15 @@ h1, h2, h3, h4, h5, h6 {
   
   .footer-grid { grid-template-columns: 1fr; gap: 40px; }
   .footer-brand .logo-img { margin-bottom: 16px; }
+  
+  /* Responsive Ketua Carousel Overrides */
+  .ketua-track { padding: 20px !important; gap: 20px !important; }
+  .ketua-photo { width: 220px !important; height: 220px !important; }
+  .ketua-info { text-align: center !important; }
+  .ketua-slide { justify-content: center !important; }
+  .nav-arrow { font-size: 2rem !important; }
 }
+
 
 /* Fix double/ghosting image on single news pages */
 .post-featured-image {
